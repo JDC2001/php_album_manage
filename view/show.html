@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="./css/main.css">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <?=htmlspecialchars($data['name'])?>-在线相册
+    </title>
+    <style>
+        canvas {
+            position: absolute;
+            display: block;
+            width: 800px !important;
+            /* height: 800px !important; */
+            /* z-index: 1; */
+            z-index: 9999;
+            max-width: fit-content;
+
+        }
+
+        .top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 500px !important;
+            height: 500px !important;
+        }
+
+        .button {
+            /* width: 100px;
+            height: 30px; */
+            background-color: pink;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 100px;
+            margin-left: 50px !important;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="margin-left:10px;">
+        <div style="display: inline-block; font-size:45px;margin: 20px 0px; ">在线相册</div>
+        <div style="display: inline-block; ">
+            <a href="index.php">首页</a>
+            <button onclick="generateImage()" class="button">点我，有惊喜！</button>
+            <?php foreach($nav as $v): ?>
+            <a href="index.php?id=<?=$v['id']?>">>
+                <?=$v['name']?>
+            </a>
+            <?php endforeach ?>
+        </div>
+    </div>
+    <hr />
+    <div style="margin-left:10px;height:45px">
+        <div style="display: inline-block;"><span class="curr2">
+                <?=htmlspecialchars($data['name'])?>
+            </span></div>
+        <!-- <div style="display: inline-block;margin-left:10px;"><a href="./uploads/<?=$data['save']?>" target="_blank">查看原图</a></div> -->
+    </div>
+    <hr />
+    <div class="view_pic">
+        <?php if($prev): ?>
+        <a class="prev_btn" href="?id=<?=$prev?>">←</a>
+        <?php else: ?><a href="" class="prev_btn">←</a>
+        <?php endif; ?>
+        <a href="./uploads/<?=$data['save']?>" target="_blank" title="查看原图"><img class="show_img"
+                src="./uploads/<?=$data['save']?>"></a>
+        <?php if($next): ?>
+        <a class="next_btn" href="?id=<?=$next?>">→</a>
+        <?php else: ?><a href="" class="next_btn">→</a>
+        <?php endif; ?>
+    </div>
+
+    <!-- 插入canvas图画爱心 -->
+
+    <!-- <button onclick="my()">点我有惊喜！</button> -->
+    <canvas id="canvas" width="" height=""></canvas>
+
+    <!-- <script>
+                        function my() {
+                            var img = document.createElement("img");
+                            img.src = "/img/java.jpg";
+                            document.body.appendChild(img);
+                        }
+                    </script> -->
+
+
+    <canvas></canvas>
+    <canvas class="top"></canvas>
+
+    <script type="text/javascript">
+        function generateImage() {
+            //获取Canvas元素
+            var canvas = document.getElementById("canvas")
+
+
+            var width = document.body.clientWidth;
+            var height = document.body.clientHeight;
+
+            var canvas = document.getElementsByTagName('canvas')[0];
+            var canvas1 = document.getElementsByTagName('canvas')[1];
+            canvas.width = width;
+            canvas.height = height;
+            canvas1.width = width;
+            canvas1.height = height;
+
+            var context = canvas.getContext('2d');
+            var context1 = canvas1.getContext('2d');
+
+            var Style = context.createLinearGradient(0, 0, width, 0);
+            Style.addColorStop(0, "Skyblue");
+            Style.addColorStop(1, "pink");
+            var Style1 = context1.createLinearGradient(0, 0, width, 0);
+            Style1.addColorStop(0, "Skyblue");
+            Style1.addColorStop(1, "pink");
+
+            var leftI = 2;
+            var rightI = 2;
+            var leftInterval = setInterval(function () {
+                var obj = loveCurve(2 * Math.PI * (leftI / 60), 10);
+                heart(context, rand(6, 8) / 10, width / 4, height / 4, obj.x * 1.4, obj.y * 1.4, Style);
+                leftI += 1;
+                if (leftI == 29) {
+                    leftI += 4;
+                }
+                if (leftI == 59) {
+                    clearInterval(leftInterval);
+                    var rightInterval = setInterval(function () {
+                        var obj = loveCurve(2 * Math.PI * (rightI / 60), 10);
+                        heart(context, rand(4, 8) / 10, width / 4 + 200, height / 4, obj.x * 1.4, obj.y * 1.4, Style);
+                        rightI += 1;
+                        if (rightI == 29) {
+                            rightI += 4;
+                        }
+                        if (rightI == 59) {
+                            clearInterval(rightInterval);
+                            arrow();
+
+                        }
+                    }, 20)
+                }
+            }, 20)
+
+            var hotArr = [];
+            var text = "我爱学习";
+            var hotInterval = setInterval(function () {
+                if (rand(-19, 19) == 1 && hotArr.length < 2) {
+                    hotArr.push([2, rand(30, width - 30), height, text[rand(0, text.length - 1)]]);
+                }
+                context1.clearRect(0, 0, width, height);
+                context1.font = "30px Verdana";
+                for (var i = 0; i < hotArr.length; i++) {
+                    heart(context1, hotArr[i][0], hotArr[i][1], hotArr[i][2], 0, 0, Style1);
+                    context1.fillStyle = Style1;
+                    context1.fillRect(hotArr[i][1] + 85, hotArr[i][2] + 90, 30, 30);
+                    context1.fillStyle = "violet";
+                    context1.fillText(hotArr[i][3], hotArr[i][1] + 90, hotArr[i][2] + 115);
+                    hotArr[i][2] -= 3;
+                    if (hotArr[i][2] <= -20) {
+                        hotArr.splice(i, 1);
+                        i--;
+                    }
+                }
+            }, 30)
+
+
+            function arrow() {
+                context.beginPath();
+                context.lineWidth = 4;
+                context.strokeStyle = Style;
+                context.lineCap = 'round';
+                context.lineJoin = 'round';
+                var arrowI = 0;
+                var arrowX = width / 4 * 3.4 - width / 4 * 0.6;
+                var arrowY = height / 4 * 3 - height / 4 * 1;
+                var arrowInterval = setInterval(function () {
+                    context.lineTo(width / 4 * 3.4 - arrowX * arrowI / 10, height / 4 * 1 + arrowY * arrowI / 10);
+                    context.lineTo(width / 4 * 3.4 - arrowX * (arrowI + 1) / 10, height / 4 * 1 + arrowY * (arrowI + 1) / 10);
+                    context.stroke();
+                    arrowI += 1;
+                    if (arrowI == 10) {
+                        clearInterval(arrowInterval);
+                        context.lineTo(width / 4 * 0.6, height / 4 * 3);
+                        context.lineTo(width / 4 * 0.6 + 20, height / 4 * 3 - 32);
+                        context.stroke();
+                        context.lineTo(width / 4 * 0.6, height / 4 * 3);
+                        context.lineTo(width / 4 * 0.6 + 30, height / 4 * 3 + 12);
+                        context.stroke();
+                    }
+                }, 20)
+                context.closePath();
+            }
+
+            function heart(context, r, scaleX, scaleY, x, y, color) {
+                context.beginPath();
+                context.strokeStyle = color;
+                context.fillStyle = color;
+                for (var i = 0; i <= 360; i++) {
+                    var obj = loveCurve(2 * Math.PI * (i / 360), r);
+                    context.lineTo(obj.x + scaleX + x, (obj.y + scaleY + y).toFixed(2));
+                    context.stroke();
+                }
+                context.fill();
+                context.closePath();
+            }
+
+            //爱心曲线	t的取值范围是0到2*Math.PI。
+            function loveCurve(t, r) {
+                var obj = {
+                    x: 100 + r * (16 * Math.pow(Math.sin(t), 3)),
+                    y: 50 - r * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
+                }
+                return obj;
+            }
+
+            function rand(n, m) {
+                var c = m - n + 1;
+                return Math.floor(Math.random() * c + n);
+            }
+
+        }
+
+    </Script>
+
+</body>
+
+</html>
