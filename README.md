@@ -9,9 +9,7 @@
 -排序浏览  
 -相片缩略图生成  
 -相片详情查看  
-![Image text](https://github.com/mcx3499/PHP-album/blob/master/image/1.png)
-![Image text](https://github.com/mcx3499/PHP-album/blob/master/image/2.png)
-![Image text](https://github.com/mcx3499/PHP-album/blob/master/image/3.png)
-![Image text](https://github.com/mcx3499/PHP-album/blob/master/image/4.png)
+
 ####  
 这可以是一个情侣相册，有需要的大兄弟自取
+
