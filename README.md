@@ -12,4 +12,4 @@
 
 ####  
 这可以是一个情侣相册，有需要的大兄弟自取
-
+https://github.com/JDC2001/php_album_manage.git
