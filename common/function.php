@@ -53,6 +53,8 @@ function thumb($file,$save,$limit){
   $info = getimagesize($file);
   list($width,$height) = $info;
   $mime = $info['mime'];
+
+  //创建缩略图
   if(!in_array($mime,['image/png','image/jpeg'])){
     trigger_error('创建缩略图失败，不支持的图片类型。',E_USER_WARNING);
     return false;

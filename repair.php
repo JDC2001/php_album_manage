@@ -1,7 +1,7 @@
 <?php
 require './common/init.php';
-$start  = '0';
-$size = '100';
+$start  = '0';//开始位置
+$size = '100';//每次检查100条记录
 $data = db_fetch_all("SELECT `id`,`pid`,`path`,`total` FROM `album` LIMIT $start,$size");
 echo "第".($start+1)."到".($start+$size)."行数据检查完成。";//查询album表所有数据
 foreach($data as $v){
